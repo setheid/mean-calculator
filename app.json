@@ -1,0 +1,12 @@
+{
+  "name": "mean-calculator",
+  "description": "Calculator using (no MongoDB), Express.js, AngularJS, and Node.js",
+  "buildpacks": [
+    {
+      "url": "https://elements.heroku.com/buildpacks/heroku/heroku-buildpack-nodejs"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}

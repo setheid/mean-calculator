@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+var PORT = process.env.PORT || 3000;
 
 var operators = ['Add', 'Subtract', 'Multiply', 'Divide'];
 
@@ -17,8 +18,8 @@ function calculate(operator, value1, value2) {
 app.use(express.static(__dirname + '/build'));
 app.use(require('body-parser').json());
 
-app.listen(8080, () => {
-  console.log('server started on port 8080');
+app.listen(PORT, () => {
+  console.log('server started on port', PORT);
 });
 
 app.route('/calculator')

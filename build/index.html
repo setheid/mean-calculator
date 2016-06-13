@@ -1,27 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html data-ng-app="App">
   <head>
     <meta charset="utf-8">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans|Lora|Lato:700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="main.css" charset="utf-8">
     <title>Calculator</title>
   </head>
-  <body>
-    <header>
-      <h1>Solve</h1>
-    </header>
-
-    <form method="post">
-      <h3>Select an Operator</h3>
-      <select ng-options="operator in appCtrl.operators">
-        <option value="">-- choose operator --</option>
-      </select>
-      <input type="number" value="1st value">
-      <input type="number" value="2nd value">
-    </form>
-
-    <div class="result">
-      <h1>Results</h1>
-      <h2 data-ng-if="appCtrl.results.length" data-ng-repeat="result in appCtrl.results">{{result.value1}} {{result.operator}} {{result.value2}} = {{result.result}}</h2>
+  <body data-ng-controller="AppController as appCtrl">
+    <h1>Solve</h1>
+    <div class="solve">
+      <h2 data-ng-show="appCtrl.error" class="error">{{appCtrl.error}}</h2>
+      <form method="post">
+        <h2>Select an Operator</h2>
+        <select data-ng-model="operator" data-ng-options="operatorOption.name for operatorOption in appCtrl.operators">
+          <option value="">-- choose operator --</option>
+        </select>
+        <h2>Select Numbers</h2>
+        <input data-ng-model="value1" type="number" placeholder="1st Number">
+        <span>{{operator ? operator.symbol : "?"}}</span>
+        <input data-ng-model="value2" type="number" placeholder="2nd Number">
+        <span>=</span>
+        <button data-ng-click="appCtrl.calculate(operator, value1, value2); value1=undefined; value2=undefined; operator=undefined" type="button">Calculate</button>
+      </form>
     </div>
 
+    <div data-ng-show="appCtrl.results.length">
+      <h1>Results</h1>
+      <div class="result">
+        <h2 data-ng-repeat="result in appCtrl.results">{{result.value1}} {{result.operator}} {{result.value2}} = {{result.result}}</h2>
+      </div>
+    </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular-route.js" charset="utf-8"></script>
+  <script src="app.js" charset="utf-8"></script>
   </body>
 </html>

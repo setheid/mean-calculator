@@ -2,8 +2,8 @@ var app = angular.module('App', []);
 
 app.controller('AppController', ['$http', function($http) {
   var _this = this;
-  var apiRoute = 'https://mean-calculator.herokuapp.com/calculator';
   // var apiRoute = 'http://localhost:3000/calculator';
+  var apiRoute = 'https://mean-calculator.herokuapp.com/calculator';
   _this.results = [];
   _this.operators = [];
 
@@ -29,7 +29,8 @@ app.controller('AppController', ['$http', function($http) {
 }]);
 
 function validate(operator, value1, value2) {
+  console.log(operator, value1, value2);
   if (!operator) return 'Please select an operator.';
-  if (value1 === '' || value1 === undefined || value2 === '' || value2 === undefined) return 'Please enter two numbers.';
+  if ((!value1 && value1 != 0) || (!value1 && value1 != 0)) return 'Please enter two numbers.';
   return null;
 }

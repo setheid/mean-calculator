@@ -18,8 +18,8 @@ function calculate(operator, value1, value2) {
 app.use(express.static(__dirname + '/build'));
 app.use(require('body-parser').json());
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://mean-calculator.herokuapp.com/calculator');
   // res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Origin', 'https://mean-calculator.herokuapp.com/calculator');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   next();
 });

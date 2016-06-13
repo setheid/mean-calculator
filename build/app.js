@@ -19,7 +19,6 @@ app.controller('AppController', ['$http', function($http) {
     if (!_this.error) {
       $http.post(apiRoute, {operator, value1, value2})
         .then(function(res) {
-          console.log(res.data);
           _this.results.push(res.data.result);
         }, function(res) {
           console.log(res);
@@ -29,7 +28,6 @@ app.controller('AppController', ['$http', function($http) {
 }]);
 
 function validate(operator, value1, value2) {
-  console.log(operator, value1, value2);
   if (!operator) return 'Please select an operator.';
   if ((!value1 && value1 != 0) || (!value1 && value1 != 0)) return 'Please enter two numbers.';
   return null;

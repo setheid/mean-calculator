@@ -1,25 +1,19 @@
 var app = angular.module('App', []);
-// var apiRoute = 'http://localhost:3000/calculator';
-var apiRoute = if (PROJ_ENV == 'production') {
-  return 'https://mean-calculator.herokuapp.com/calculator';
-} else {
-  return 'http://localhost:3000/calculator';
-}
 
 app.controller('AppController', ['$http', function($http) {
+  // var apiRoute = 'http://localhost:3000/calculator';
+  var apiRoute = 'https://mean-calculator.herokuapp.com/calculator';
   var _this = this;
+
   _this.results = [];
   _this.operators = [];
 
-  _this.getOperators = function() {
-    $http.get(apiRoute)
-    .then(function(res) {
-      _this.operators = res.data.operators;
-    }, function(res) {
-    });
-  }
-
-  _this.getOperators();
+  $http.get(apiRoute)
+  .then(function(res) {
+    _this.operators = res.data.operators;
+  }, function(res) {
+    console.log(res);
+  });
 
   _this.calculate = function(operator, value1, value2) {
     _this.error = validate(operator, value1, value2);

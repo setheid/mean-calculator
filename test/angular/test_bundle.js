@@ -48,39 +48,62 @@
 	__webpack_require__(3);
 	__webpack_require__(4);
 
-	describe('MEAN Calculator App', () => {
-	  let appCtrl;
-	  let apiRoute = 'http://localhost:3000/calculator';
+	// Run test with 'karma start'
+	describe('AppController', () => {
+	  let $httpBackend, createController;
+	  let apiRoute = 'https://mean-calculator.herokuapp.com/calculator';
 
 	  beforeEach(angular.mock.module('App'));
-	  beforeEach(angular.mock.inject(function($controller) {
-	    appCtrl = $controller('AppController');
-	  }));
-	  it('should construct a controller', function() {
-	    expect(typeof appCtrl).toBe('object');
-	  });
-	  describe('function to get operations ajax request', () => {
-	    var $httpBackend;
-	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
-	      $httpBackend = _$httpBackend_;
-	    }));
-	    afterEach(() => {
-	      $httpBackend.verifyNoOutstandingExpectation();
-	      $httpBackend.verifyNoOutstandingRequest();
-	    });
 
-	    it('should create an array of operations', () => {
-	      $httpBackend.expectGET(apiRoute)
-	        .respond(200, {operators: [
-	          {name:'Add', symbol:'+'},
-	          {name:'Subtract', symbol:'-'},
-	          {name:'Multiply', symbol:'*'},
-	          {name:'Divide', symbol:'/'}
-	        ]});
-	      appCtrl.getOperators();
+	  beforeEach(angular.mock.inject(function($controller, _$httpBackend_) {
+	    createController = function() {
+	      return $controller('AppController');
+	    }
+	    $httpBackend = _$httpBackend_;
+
+	    $httpBackend.expectGET(apiRoute)
+	      .respond(200, {operators: [
+	        {name:'Add', symbol:'+'},
+	        {name:'Subtract', symbol:'-'},
+	        {name:'Multiply', symbol:'*'},
+	        {name:'Divide', symbol:'/'}
+	      ]});
+	  }));
+
+	  afterEach(() => {
+	    $httpBackend.verifyNoOutstandingExpectation();
+	    $httpBackend.verifyNoOutstandingRequest();
+	  });
+
+	  describe('functions for calculating operations', () => {
+
+	    it('should get an operators array and save as appCtrl.operators', () => {
+	      let appCtrl = createController();
 	      $httpBackend.flush();
 	      expect(appCtrl.operators.length).toBe(4);
 	      expect(appCtrl.operators[0].name).toBe('Add');
+	    });
+
+	    it('should send operator and numbers and return the calculated result', () => {
+	      let appCtrl = createController();
+	      $httpBackend.flush();
+
+	      $httpBackend.expectPOST(apiRoute)
+	        .respond(200, {
+	          result: {
+	            operator: '+',
+	            value1: 7,
+	            value2: 3,
+	            result: 10
+	          }
+	        });
+
+	      appCtrl.calculate({name:'Add',symbol:'+'}, 7, 3);
+
+	      $httpBackend.flush();
+
+	      expect(appCtrl.results[0].result).toBe(10);
+	      expect(appCtrl.results[0].operator).toBe('+');
 	    });
 	  });
 	});
@@ -31129,21 +31152,19 @@
 	var app = angular.module('App', []);
 
 	app.controller('AppController', ['$http', function($http) {
-	  var _this = this;
 	  // var apiRoute = 'http://localhost:3000/calculator';
 	  var apiRoute = 'https://mean-calculator.herokuapp.com/calculator';
+	  var _this = this;
+
 	  _this.results = [];
 	  _this.operators = [];
 
-	  _this.getOperators = function() {
-	    $http.get(apiRoute)
-	    .then(function(res) {
-	      _this.operators = res.data.operators;
-	    }, function(res) {
-	    });
-	  }
-
-	  _this.getOperators();
+	  $http.get(apiRoute)
+	  .then(function(res) {
+	    _this.operators = res.data.operators;
+	  }, function(res) {
+	    console.log(res);
+	  });
 
 	  _this.calculate = function(operator, value1, value2) {
 	    _this.error = validate(operator, value1, value2);

@@ -4,7 +4,12 @@ const express = require('express');
 const app = express();
 let PORT = process.env.PORT || 3000;
 
-let operators = [{name:'Add', symbol:'+'}, {name:'Subtract', symbol:'-'}, {name:'Multiply', symbol:'*'}, {name:'Divide', symbol:'/'}];
+let operators = [
+  {name:'Add', symbol:'+'},
+  {name:'Subtract', symbol:'-'},
+  {name:'Multiply', symbol:'*'},
+  {name:'Divide', symbol:'/'}
+];
 
 function calculate(operator, value1, value2) {
   if ( operator == 'Divide' && value2 == 0) return 'Undefined';
